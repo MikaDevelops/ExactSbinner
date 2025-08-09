@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exact Sbinner</title>
+    <script src="./js/file_handler.js"></script>
+    <script src="./js/text_to_array.js"></script>
+    <script>
+        var listArray;
+        const fileHandler = new FileHandler();
+        const textToArray = new TextToArray();
+        async function setList(file){
+            listArray = textToArray.makeArray(await fileHandler.loadText(file));
+        }
+    </script>
+</head>
+<body>
+    <h1>Exact Sbinner</h1>
+    <div><input type="file" onchange="setList(this.files[0]);"></div>
+    <div id="results"></div>
+</body>
+</html>

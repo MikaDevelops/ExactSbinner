@@ -1,0 +1,5 @@
+class TextToArray{
+    makeArray(text){
+        
+    }
+}
