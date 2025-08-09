@@ -13,11 +13,26 @@
         async function setList(file){
             listArray = textToArray.makeArray(await fileHandler.loadText(file));
         }
+        function enableSearchButton(){
+            if (listArray && document.getElementById('search_text').value.length>0) {
+                document.getElementById("search_button").removeAttribute("disabled");
+            }
+            else {
+               document.getElementById("search_button").setAttribute("disabled", ""); 
+            }     
+        }
+        function search(){
+            
+        }
     </script>
 </head>
 <body>
     <h1>Exact Sbinner</h1>
     <div><input type="file" onchange="setList(this.files[0]);"></div>
+    <div>
+        <input id="search_text" type="text" oninput="enableSearchButton();"> 
+        <button id="search_button" onclick="search()" disabled>search</button>
+    </div>
     <div id="results"></div>
 </body>
 </html>
