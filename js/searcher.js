@@ -5,8 +5,13 @@ class Searcher{
         searchTerm = searchTerm.replace(",","");
         this.#checkTerm(searchTerm);
         let searchNum = searchTerm.slice(0,9);
-        for (let line of arrayToSearch){
-            if(line.startsWith(searchNum)) resultArray.push(line);
+        let extraNums=0;
+        if(searchNum.length>6) extraNums = 9-searchNum.length;
+
+        for (let i=0; i<extraNums+1; i++){
+            this.#searchArray(arrayToSearch,searchNum,resultArray);
+            if (resultArray.length > 0) break;
+            searchNum = searchNum.slice(0, -1);
         }
         return resultArray;   
     }
@@ -14,5 +19,9 @@ class Searcher{
         if (isNaN(term)) alert("not a number");
         if (term.length < 6) alert("less than 6 digits");
     }
-
+    #searchArray(arrayToSearch, searchNum, results){
+        for (let line of arrayToSearch){
+            if(line.startsWith(searchNum)) results.push(line);
+        }
+    }
 }
