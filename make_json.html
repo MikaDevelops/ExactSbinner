@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exact Sbinner JSON-file maker</title>
+    <script src="./js/json_data_handler.js"></script>
+    <script src="./js/file_handler.js"></script>
+    <script>
+        var textFromFile;
+        const jsonDataHandler = new JsonDataHandler();
+        const fileHandler = new FileHandler();
+        
+        async function readList(file){
+            textFromFile = await fileHandler.loadText(file);
+            document.getElementById('button').removeAttribute("disabled");
+        }
+
+        function makeJsonFile(){
+            document.getElementById('button').setAttribute("disabled", "disabled");
+            document.getElementById('inputfile').value ="";
+            document.getElementById('inputfile').setAttribute("disabled", "disabled");
+
+            fileHandler.saveTextToFile( jsonDataHandler.makeJsonString(textFromFile) );
+
+            document.getElementById('inputfile').removeAttribute("disabled");
+        }
+
+    </script>
+</head>
+<body>
+    <h1>Exact Sbinner JSON-file maker</h1>
+    <div>
+        <p>This converts Exact Bins 6 to 9 digits into JSON-text.</p>
+        <p>Needs to be refactored if list exeeds browser string limitations. Extended list is
+            about 240 milion characters long at this moment (2025).</p>
+    </div>
+    <div><input type="file" id="inputfile" onchange="readList(this.files[0]);"></div>
+    <div>
+        <button id="button" onclick="makeJsonFile()" disabled>Make JSON-file</button>
+    </div>
+</body>
+</html>
