@@ -1,7 +1,14 @@
 class JsonDataHandler{
     makeJsonString(csvString){
         console.log("json maker started")
-        const jsonObject = {};
+        const jsonObject = {
+            bins:{},
+            brands:{},
+            issuers:{},
+            types:{},
+            subtypes:{},
+            countries:{}
+        };
         let linesArray = csvString.split("\n");
 
         let countryMap = new Map();
@@ -17,19 +24,33 @@ class JsonDataHandler{
         let brandCounter = 1;
 
         for (let line of linesArray){
+            
             let splitedLine = this.#splitLine(line);
-            console.log(splitedLine)
+            
+            if(Object.keys(jsonObject.bins).includes(splitedLine[0])) throw new Error("double entry in list file");
+            jsonObject.bins[splitedLine[0]] = {};
+            
             // country
+            if (!countryMap.has(splitedLine[5])) countryMap.set(splitedLine[5], countryCounter++);
+            jsonObject.bins[splitedLine[0]]['country'] = countryMap.get(splitedLine[5]);
 
             // subtype
+            if (!subtypeMap.has(splitedLine[4])) subtypeMap.set(splitedLine[4], subtypeCounter++);
+            jsonObject.bins[splitedLine[0]]['subtype'] = subtypeMap.get(splitedLine[4]);
 
             // type
+            if (!typeMap.has(splitedLine[3])) typeMap.set(splitedLine[3], typeCounter++);
+            jsonObject.bins[splitedLine[0]]['type'] = typeMap.get(splitedLine[3]);
 
             // issuer
+            if (!issuerMap.has(splitedLine[2])) issuerMap.set(splitedLine[2], issuerCounter++);
+            jsonObject.bins[splitedLine[0]]['issuer'] = issuerMap.get(splitedLine[2]);
 
             // brand
+            if (!brandMap.has(splitedLine[1])) brandMap.set(splitedLine[1], brandCounter++);
+            jsonObject.bins[splitedLine[0]]['brand'] = brandMap.get(splitedLine[1]);
         }
-
+        console.log(jsonObject.bins);
         return JSON.stringify(jsonObject);
     }
     #splitLine(lineToSplit){
