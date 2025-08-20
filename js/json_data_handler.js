@@ -50,7 +50,13 @@ class JsonDataHandler{
             if (!brandMap.has(splitedLine[1])) brandMap.set(splitedLine[1], brandCounter++);
             jsonObject.bins[splitedLine[0]]['brand'] = brandMap.get(splitedLine[1]);
         }
-        console.log(jsonObject.bins);
+
+        jsonObject.brands = Object.fromEntries(brandMap);
+        jsonObject.issuers = Object.fromEntries(issuerMap);
+        jsonObject.types = Object.fromEntries(typeMap);
+        jsonObject.subtypes = Object.fromEntries(subtypeMap);
+        jsonObject.countries = Object.fromEntries(countryMap);
+        console.log(jsonObject);
         return JSON.stringify(jsonObject);
     }
     #splitLine(lineToSplit){
