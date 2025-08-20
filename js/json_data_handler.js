@@ -51,13 +51,20 @@ class JsonDataHandler{
             jsonObject.bins[splitedLine[0]]['brand'] = brandMap.get(splitedLine[1]);
         }
 
-        jsonObject.brands = Object.fromEntries(brandMap);
-        jsonObject.issuers = Object.fromEntries(issuerMap);
-        jsonObject.types = Object.fromEntries(typeMap);
-        jsonObject.subtypes = Object.fromEntries(subtypeMap);
-        jsonObject.countries = Object.fromEntries(countryMap);
-        console.log(jsonObject);
+        jsonObject.brands = this.#mapToObjectReverse(brandMap);
+        jsonObject.issuers = this.#mapToObjectReverse(issuerMap);
+        jsonObject.types = this.#mapToObjectReverse(typeMap);
+        jsonObject.subtypes = this.#mapToObjectReverse(subtypeMap);
+        jsonObject.countries = this.#mapToObjectReverse(countryMap);
+
         return JSON.stringify(jsonObject);
+    }
+    #mapToObjectReverse(mapToReverse){
+        let object = {};
+        for (let keyValueArr of mapToReverse){
+            object[keyValueArr[1]] = keyValueArr[0];
+        }
+        return object;
     }
     #splitLine(lineToSplit){
 
