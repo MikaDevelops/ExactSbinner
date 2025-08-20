@@ -9,8 +9,10 @@ class JsonDataHandler{
             subtypes:{},
             countries:{}
         };
+        let linesplittingStartTime = performance.now();
         let linesArray = csvString.split("\n");
-
+        let linesplittingEndTime = performance.now();
+        
         let countryMap = new Map();
         let subtypeMap = new Map();
         let typeMap = new Map();
@@ -22,12 +24,13 @@ class JsonDataHandler{
         let typeCounter = 1;
         let issuerCounter = 1;
         let brandCounter = 1;
-
+        let lineToObjectStart = performance.now();
+        //let binskeys = Object.keys(jsonObject.bins);
         for (let line of linesArray){
             
             let splitedLine = this.#splitLine(line);
-            
-            if(Object.keys(jsonObject.bins).includes(splitedLine[0])) throw new Error("double entry in list file");
+
+            if(jsonObject[splitedLine[0]]) throw new Error("double entry in list file");
             jsonObject.bins[splitedLine[0]] = {};
             
             // country
@@ -50,13 +53,18 @@ class JsonDataHandler{
             if (!brandMap.has(splitedLine[1])) brandMap.set(splitedLine[1], brandCounter++);
             jsonObject.bins[splitedLine[0]]['brand'] = brandMap.get(splitedLine[1]);
         }
-
+        let lineToObjectEnd = performance.now();
+        let mapReverseStart = performance.now();
         jsonObject.brands = this.#mapToObjectReverse(brandMap);
         jsonObject.issuers = this.#mapToObjectReverse(issuerMap);
         jsonObject.types = this.#mapToObjectReverse(typeMap);
         jsonObject.subtypes = this.#mapToObjectReverse(subtypeMap);
         jsonObject.countries = this.#mapToObjectReverse(countryMap);
-
+        let mapReverseEnd = performance.now();
+        console.log(`
+line slit took: ${linesplittingEndTime-linesplittingStartTime}
+lines to object took: ${lineToObjectEnd-lineToObjectStart}
+maps revering took: ${mapReverseEnd-mapReverseStart}`);
         return JSON.stringify(jsonObject);
     }
     #mapToObjectReverse(mapToReverse){
