@@ -30,7 +30,10 @@ class JsonDataHandler{
             
             let splitedLine = this.#splitLine(line);
 
-            if(jsonObject[splitedLine[0]]) throw new Error("double entry in list file");
+            if(jsonObject.bins[splitedLine[0]]){
+                alert('Double entry in list file. Processing stopped.');
+                throw new Error("double entry in list file");
+            }
             jsonObject.bins[splitedLine[0]] = {};
             
             // country
