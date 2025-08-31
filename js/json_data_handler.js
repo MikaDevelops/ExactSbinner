@@ -154,9 +154,6 @@ class JsonDataHandler{
             theString += key + ";" + countries[key] + "\n";
         }
 
-        theString.trimEnd();
-
-        console.log(theString);
         return theString;
     }
 
