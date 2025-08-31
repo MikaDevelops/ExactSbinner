@@ -1,6 +1,6 @@
 class JsonDataHandler{
-    makeJsonString(csvString){
-        console.log("json maker started")
+
+    makeJsonString(csvString, typeOfResultFile){
         const jsonObject = {
             bins:{},
             brands:{},
@@ -9,9 +9,8 @@ class JsonDataHandler{
             subtypes:{},
             countries:{}
         };
-        let linesplittingStartTime = performance.now();
+        //let linesplittingStartTime = performance.now();
         let linesArray = csvString.split("\n");
-        let linesplittingEndTime = performance.now();
         
         let countryMap = new Map();
         let subtypeMap = new Map();
@@ -24,8 +23,7 @@ class JsonDataHandler{
         let typeCounter = 1;
         let issuerCounter = 1;
         let brandCounter = 1;
-        let lineToObjectStart = performance.now();
-        //let binskeys = Object.keys(jsonObject.bins);
+
         for (let line of linesArray){
             
             let splitedLine = this.#splitLine(line);
@@ -56,20 +54,17 @@ class JsonDataHandler{
             if (!brandMap.has(splitedLine[1])) brandMap.set(splitedLine[1], brandCounter++);
             jsonObject.bins[splitedLine[0]]['brand'] = brandMap.get(splitedLine[1]);
         }
-        let lineToObjectEnd = performance.now();
-        let mapReverseStart = performance.now();
+
         jsonObject.brands = this.#mapToObjectReverse(brandMap);
         jsonObject.issuers = this.#mapToObjectReverse(issuerMap);
         jsonObject.types = this.#mapToObjectReverse(typeMap);
         jsonObject.subtypes = this.#mapToObjectReverse(subtypeMap);
         jsonObject.countries = this.#mapToObjectReverse(countryMap);
-        let mapReverseEnd = performance.now();
-        console.log(`
-line slit took: ${linesplittingEndTime-linesplittingStartTime}
-lines to object took: ${lineToObjectEnd-lineToObjectStart}
-maps revering took: ${mapReverseEnd-mapReverseStart}`);
-        return JSON.stringify(jsonObject);
+
+        if (typeOfResultFile === 'json') return JSON.stringify(jsonObject);
+        if (typeOfResultFile === 'csv') return this.#makeCSVtext(jsonObject);
     }
+
     #mapToObjectReverse(mapToReverse){
         let object = {};
         for (let keyValueArr of mapToReverse){
@@ -77,6 +72,7 @@ maps revering took: ${mapReverseEnd-mapReverseStart}`);
         }
         return object;
     }
+
     #splitLine(lineToSplit){
 
         let resultArray = [];
@@ -106,5 +102,65 @@ maps revering took: ${mapReverseEnd-mapReverseStart}`);
         }
 
         return resultArray;
+    }
+
+    #makeCSVtext(jsonObject){
+        let theString="";
+        
+        // bins
+        theString += this.#nameTheSet('bins');
+        for(let key in jsonObject.bins){
+            theString += 
+                key +";"+ 
+                jsonObject.bins[key].brand + ";" + 
+                jsonObject.bins[key].issuer + ";" + 
+                jsonObject.bins[key].type + ";"+
+                jsonObject.bins[key].subtype + ";"+ 
+                jsonObject.bins[key].country + "\n";
+
+        }
+
+        // brands
+        theString += this.#nameTheSet('brands');
+        let brands = jsonObject.brands;
+        for(let key in brands){
+            theString += key + ";" + brands[key] + "\n";
+        }
+        // issuers
+        theString += this.#nameTheSet('issuers');
+        let issuers = jsonObject.issuers;
+        for(let key in issuers){
+            theString += key + ";" + issuers[key] + "\n";
+        }
+
+        // types
+        theString += this.#nameTheSet('types');
+        let types = jsonObject.types;
+        for(let key in types){
+            theString += key + ";" + types[key] + "\n";
+        }
+
+        // subtypes
+        theString += this.#nameTheSet('subtypes');
+        let subtypes = jsonObject.subtypes;
+        for(let key in subtypes){
+            theString += key + ";" + subtypes[key] + "\n";
+        }
+
+        // countries
+        theString += this.#nameTheSet('countries');
+        let countries = jsonObject.countries;
+        for(let key in countries){
+            theString += key + ";" + countries[key] + "\n";
+        }
+
+        theString.trimEnd();
+
+        console.log(theString);
+        return theString;
+    }
+
+    #nameTheSet(nameOfSet){
+        return `#####${nameOfSet}#####\n`;
     }
 }

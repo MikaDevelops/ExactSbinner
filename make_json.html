@@ -21,23 +21,43 @@
             document.getElementById('inputfile').value ="";
             document.getElementById('inputfile').setAttribute("disabled", "disabled");
 
-            fileHandler.saveTextToFile( jsonDataHandler.makeJsonString(textFromFile) );
+            fileHandler.saveTextToFile( jsonDataHandler.makeJsonString(textFromFile, radioChecker()) );
 
             document.getElementById('inputfile').removeAttribute("disabled");
         }
 
+        function radioChecker(){
+            console.log(document.getElementById('radio_json').checked);
+            console.log(document.getElementById('radio_csv').checked);
+            if (document.getElementById('radio_json').checked) return "json";
+            if (document.getElementById('radio_csv').checked) return "csv";
+        }
+
     </script>
+    <style>
+        .radios{
+            padding-top:1.2rem;
+            padding-bottom: 0.5rem;
+        }
+    </style>
 </head>
 <body>
     <h1>Exact Sbinner JSON-file maker</h1>
     <div>
         <p>This converts Exact Bins 6 to 9 digits into JSON-text.</p>
+        <p>Also there is an option to convert csv into csv dataset.</p>
         <p>Needs to be refactored if list exeeds browser string limitations. Extended list is
             about 240 milion characters long at this moment (2025).</p>
     </div>
-    <div><input type="file" id="inputfile" onchange="readList(this.files[0]);"></div>
+    <div class="file_picker"><input type="file" id="inputfile" onchange="readList(this.files[0]);"></div>
+    <div class="radios">
+        <input type="radio" id="radio_json" name="radio_button_type" checked="true">
+        <label for="radio_json">JSON-file</label><br>
+        <input type="radio" id="radio_csv" name="radio_button_type">
+        <label for="radio_csv">CSV-style dataset</label>
+    </div>
     <div>
-        <button id="button" onclick="makeJsonFile()" disabled>Make JSON-file</button>
+        <button id="button" onclick="makeJsonFile()" disabled>Make file</button>
     </div>
 </body>
 </html>
