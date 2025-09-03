@@ -7,9 +7,7 @@ class Searcher{
         let searchNum = searchTerm.slice(0,9);
         let extraNums=0;
         if(searchNum.length>6) extraNums = searchNum.length-6;
-        console.log(extraNums, searchNum.length)
         for (let i=0; i<extraNums+1; i++){
-            console.log(searchNum)
             this.#searchArray(arrayToSearch,searchNum,resultArray);
             if (resultArray.length > 0) break;
             searchNum = searchNum.slice(0, -1);
