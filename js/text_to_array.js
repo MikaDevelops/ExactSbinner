@@ -1,6 +1,5 @@
 class TextToArray{
-    makeArray(text){
-        //let 
+    makeArray(text, type){
         return text.split("\n");
     }
 
