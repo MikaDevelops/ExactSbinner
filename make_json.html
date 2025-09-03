@@ -27,8 +27,6 @@
         }
 
         function radioChecker(){
-            console.log(document.getElementById('radio_json').checked);
-            console.log(document.getElementById('radio_csv').checked);
             if (document.getElementById('radio_json').checked) return "json";
             if (document.getElementById('radio_csv').checked) return "csv";
         }
@@ -42,6 +40,7 @@
     </style>
 </head>
 <body>
+    <div class="navbar"><a href="index.html">Exact Spinner</a></div>
     <h1>Exact Sbinner JSON-file maker</h1>
     <div>
         <p>This converts Exact Bins 6 to 9 digits into JSON-text.</p>
