@@ -26,7 +26,6 @@ class TextToArray{
             + dataObject.subtypes[dataObject.bins[key].subtype] + ", " 
             + dataObject.countries[dataObject.bins[key].country] 
             + "\n";
-            console.log(lineString);
             linesArray.push(lineString);
         }
         return linesArray;
