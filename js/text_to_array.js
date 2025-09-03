@@ -8,7 +8,7 @@ class TextToArray{
                 return this.#jsonToStringArray(text);
                 break;
             case 'csv_combined':
-                return ['444', 'csv tables are here'];
+                return this.#csvTablesToStringArray(text);
                 break;
             default:
                 throw new Error('type not supported in TextToArray.makeArray');
@@ -29,6 +29,33 @@ class TextToArray{
             linesArray.push(lineString);
         }
         return linesArray;
+    }
+
+    #csvTablesToStringArray(text){
+        let csvSepararators = {
+            bins: '#####bins#####',
+            brands: '#####brands#####',
+            issuers: '#####issuers#####',
+            types: '#####types#####',
+            subtypes: '#####subtypes#####',
+            countries: '#####countries#####'
+        };
+
+        let startPos = csvSepararators.bins.length;
+        let endPos = text.indexOf(csvSepararators.brands);
+        let binsLines = text.slice(startPos, endPos);
+        binsLines = binsLines.replace(/^\n/, "");
+        binsLines = binsLines.replace(/\n$/, "");
+        binsLines = binsLines.split('\n');
+        console.log(binsLines);
+
+        let brandLines;
+        let issuersLines;
+        let typesLines;
+        let subtypesLines;
+        let countriesLines;
+
+
     }
 
 }
