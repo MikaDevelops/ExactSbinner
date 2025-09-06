@@ -43,19 +43,59 @@ class TextToArray{
 
         let startPos = csvSepararators.bins.length;
         let endPos = text.indexOf(csvSepararators.brands);
+
         let binsLines = text.slice(startPos, endPos);
-        binsLines = binsLines.replace(/^\n/, "");
-        binsLines = binsLines.replace(/\n$/, "");
-        binsLines = binsLines.split('\n');
-        console.log(binsLines);
+        binsLines = this.#csvLineSplitter(binsLines);
 
-        let brandLines;
-        let issuersLines;
-        let typesLines;
-        let subtypesLines;
-        let countriesLines;
+        startPos = text.indexOf(csvSepararators.brands)+csvSepararators.brands.length;
+        endPos = text.indexOf(csvSepararators.issuers);
 
+        let brandsLines = text.slice(startPos, endPos);
+        brandsLines = this.#csvLineSplitter(brandsLines);
 
+        startPos = text.indexOf(csvSepararators.issuers)+csvSepararators.issuers.length;
+        endPos = text.indexOf(csvSepararators.types);
+
+        let issuersLines = text.slice(startPos, endPos);
+        issuersLines = this.#csvLineSplitter(issuersLines);
+
+        startPos = text.indexOf(csvSepararators.types)+csvSepararators.types.length;
+        endPos = text.indexOf(csvSepararators.subtypes);
+
+        let typesLines = text.slice(startPos, endPos);
+        typesLines = this.#csvLineSplitter(typesLines);
+
+        startPos = text.indexOf(csvSepararators.subtypes)+csvSepararators.subtypes.length;
+        endPos = text.indexOf(csvSepararators.countries);
+
+        let subtypesLines = text.slice(startPos, endPos);
+        subtypesLines = this.#csvLineSplitter(subtypesLines);
+
+        startPos = text.indexOf(csvSepararators.countries)+csvSepararators.countries.length;
+        endPos = text.indexOf(text.length-1);
+
+        let countriesLines = text.slice(startPos, endPos);
+        countriesLines = this.#csvLineSplitter(countriesLines);
+
+        let resultArray = [];
+        for(let line of binsLines){
+            line = line.split(';');
+            resultArray.push(
+                line[0]
+                +", "+ brandsLines[line[1]-1].split(';')[1]
+                +", "+ issuersLines[line[2]-1].split(';')[1]
+                +", "+ typesLines[line[3]-1].split(';')[1]
+                +", "+ subtypesLines[line[4]-1].split(';')[1]
+                +", "+ countriesLines[line[5]-1].split(';')[1]
+            );
+        }
+        return resultArray;
+    }
+
+    #csvLineSplitter(csvText){
+        csvText = csvText.replace(/^\n/, "");
+        csvText = csvText.replace(/\n$/, "");
+        return csvText.split('\n');
     }
 
 }
