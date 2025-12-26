@@ -2,7 +2,8 @@ class TextToArray{
     makeArray(text, type){
         switch(type){
             case 'csv':
-                return text.split("\n");
+                let dataset = this.#makeJsonDataSet(text);
+                //return text.split("\n");
                 break;
             case 'json':
                 return this.#jsonToStringArray(text);
@@ -98,4 +99,65 @@ class TextToArray{
         return csvText.split('\n');
     }
 
+    #makeJsonDataSet(text){
+        const dataSet = {};
+        let arrayOfLines = text.split("\n");
+        let startIndex = 0;
+        let endIndex = 0;
+        for (let line of arrayOfLines){
+
+            endIndex = line.indexOf(",");
+            let binNum = line.slice(0,endIndex);
+            
+            startIndex = endIndex+1;
+            endIndex = line.indexOf(",", startIndex);
+            let brand = line.slice(startIndex,endIndex);
+            if(this.#indexQuotationMarks(brand,0)>-1) {
+                endIndex = this.#indexQuotationMarks(line, endIndex);
+                startIndex = this.#indexQuotationMarks(line, startIndex)+1;
+                brand = line.slice(startIndex,endIndex);
+                startIndex = line.indexOf(",", endIndex)+1;
+            }
+            else{
+                startIndex = endIndex+1;
+            }
+            
+            endIndex = line.indexOf(",", startIndex);
+            let issuer = line.slice(startIndex,endIndex);
+            if(this.#indexQuotationMarks(issuer,0)>-1) {
+                endIndex = this.#indexQuotationMarks(line, endIndex);
+                startIndex = this.#indexQuotationMarks(line, startIndex)+1;
+                issuer = line.slice(startIndex,endIndex);
+                startIndex = line.indexOf(",", endIndex)+1;
+            }
+            else{
+                startIndex = endIndex+1;
+            }
+            
+            endIndex = line.indexOf(",", startIndex);
+            let type = line.slice(startIndex, endIndex);
+
+            startIndex = endIndex+1;
+            endIndex = line.indexOf(",", startIndex);
+            let subtype = line.slice(startIndex,endIndex);
+
+            startIndex = endIndex+1;
+            endIndex = line.indexOf(",", startIndex);
+            let country = line.slice(startIndex,endIndex);
+
+            dataSet[binNum] = {
+                brand: brand,
+                issuer: issuer,
+                type: type,
+                subtype: subtype,
+                country: country
+            };
+        }
+        console.log(dataSet);
+    }
+
+    #indexQuotationMarks(text, startIndex){
+        let quotationIndex = text.indexOf('"', startIndex);
+        return quotationIndex;
+    }
 }
