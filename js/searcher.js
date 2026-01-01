@@ -42,7 +42,6 @@ class Searcher{
             let numberToCompare;
             if(toBeSlicedFromLengthier<0) numberToCompare = line.slice(0, toBeSlicedFromLengthier);
             else numberToCompare = line;
-            console.log(numberToCompare);console.log(searchNum);
             if(numberToCompare == searchNum) {
                 let information = arrayToSearch[num][line];
                 let resultLine = `${line} ${information['brand']} ${information['issuer']} `;
