@@ -8,9 +8,6 @@ class Searcher{
         let searchNum = searchTerm.slice(0,9);
         let searchStatus = {};
         for (let lens in arrayToSearch) searchStatus[lens] = false;
-        let searchStatusKeys = Object.keys(searchStatus);
-        searchStatusKeys.sort((a,b)=>b-a);
-        for (let i=0; i<searchStatusKeys.length; i++) searchStatusKeys[i] = Number(searchStatusKeys[i]);
         let lengthOfTerm = searchNum.length;
         let extraNums=0;
         if(lengthOfTerm>6) extraNums = lengthOfTerm-6;
