@@ -4,6 +4,7 @@ class TextToArray{
             case 'csv':
                 let dataset = this.#makeJsonDataSet(text);
                 //return text.split("\n");
+                return dataset;
                 break;
             case 'json':
                 return this.#jsonToStringArray(text);
@@ -144,16 +145,18 @@ class TextToArray{
             startIndex = endIndex+1;
             endIndex = line.indexOf(",", startIndex);
             let country = line.slice(startIndex,endIndex);
-
-            dataSet[binNum] = {
+            
+            if(!dataSet[binNum.length]) dataSet[binNum.length] = {};
+            dataSet[binNum.length][binNum] = {
                 brand: brand,
                 issuer: issuer,
                 type: type,
                 subtype: subtype,
                 country: country
             };
+
         }
-        console.log(dataSet);
+        return dataSet;
     }
 
     #indexQuotationMarks(text, startIndex){

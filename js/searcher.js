@@ -3,8 +3,17 @@ class Searcher{
         let resultArray = [];
         searchTerm = searchTerm.replace(".","");
         searchTerm = searchTerm.replace(",","");
+        searchTerm = searchTerm.replace(" ","");
         this.#checkTerm(searchTerm);
         let searchNum = searchTerm.slice(0,9);
+        let searchStatus = {};
+        for (let lens in arrayToSearch) searchStatus[lens] = false;
+        let searchStatusKeys = Object.keys(searchStatus);
+        searchStatusKeys.sort((a,b)=>b-a);
+        let lengthOfTerm = searchNum.length;
+
+        
+
         let extraNums=0;
         if(searchNum.length>6) extraNums = searchNum.length-6;
         for (let i=0; i<extraNums+1; i++){
